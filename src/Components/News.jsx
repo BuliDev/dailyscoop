@@ -25,7 +25,9 @@ const News = () => {
 
   useEffect(() => {
     const fetchNews = async () => {
-      const url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=911f56a750cd0e7c73bca15bfd3b3aee`
+      const apiKey = import.meta.env.VITE_GNEWS_API_KEY
+
+      const url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=${apiKey}`
 
       const response = await axios.get(url)
       const fetchedNews = response.data.articles
