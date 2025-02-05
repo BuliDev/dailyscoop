@@ -52,6 +52,10 @@ const News = () => {
 
       setHeadline(fetchedNews[0]);
       setNews(fetchedNews.slice(1, 7));
+
+      const storedBookmarks =
+        JSON.parse(localStorage.getItem("bookmarks")) || [];
+      setBookmarks(storedBookmarks);
     };
 
     fetchNews();
@@ -82,6 +86,7 @@ const News = () => {
       )
         ? prevBookmarks.filter((bookmark) => bookmark.title !== article.title)
         : [...prevBookmarks, article];
+      localStorage.setItem("bookmarks", JSON.stringify(updatedBookmarks));
       return updatedBookmarks;
     });
   };
