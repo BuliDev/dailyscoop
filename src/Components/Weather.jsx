@@ -43,6 +43,12 @@ const Weather = () => {
     setLocation(e.target.value);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      search();
+    }
+  };
+
   const getWeatherIcon = (weatherType) => {
     switch (weatherType) {
       case "Clouds":
@@ -76,21 +82,26 @@ const Weather = () => {
             placeholder="Enter Location"
             value={location}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
           />
           <i className="fa-solid fa-magnifying-glass" onClick={search}></i>
         </div>
       </div>
-      <div className="weather-data">
-        {data.weather &&
-          data.weather[0] &&
-          getWeatherIcon(data.weather[0].main)}
-        <div className="weather-type">
-          {data.weather ? data.weather[0].main : null}
+      {data.notFound ? (
+        <div className="not-found">Location Not Found</div>
+      ) : (
+        <div className="weather-data">
+          {data.weather &&
+            data.weather[0] &&
+            getWeatherIcon(data.weather[0].main)}
+          <div className="weather-type">
+            {data.weather ? data.weather[0].main : null}
+          </div>
+          <div className="temperature">
+            {data.main ? `${Math.floor(data.main.temp)}°C` : null}
+          </div>
         </div>
-        <div className="temperature">
-          {data.main ? `${Math.floor(data.main.temp)}°C` : null}
-        </div>
-      </div>
+      )}
     </div>
   );
 };
