@@ -211,7 +211,12 @@ const News = () => {
           <Calendar />
         </div>
       </div>
-      <footer className="news-footer">Footer</footer>
+      <footer className="news-footer">
+        <p>
+          <span>Daily Scoop App</span>
+        </p>
+        <p>&copy; All Right Reserved. By Alen Burovic</p>
+      </footer>
     </div>
   );
 };
