@@ -59,7 +59,7 @@ const Blogs = ({ onShowNews, onCreateBlog }) => {
     setTimeout(() => {
       setSubmited(false);
       onShowNews();
-    }, 3000);
+    }, 2000);
   };
 
   return (
