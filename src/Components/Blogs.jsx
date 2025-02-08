@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import userImg from "../assets/images/user.jpg";
 import noImg from "../assets/images/no-img.png";
 import "./Blogs.css";
 
-const Blogs = ({ onShowNews, onCreateBlog }) => {
+const Blogs = ({ onShowNews, onCreateBlog, editPost, isEditing }) => {
   const [showForm, setShowForm] = useState(false);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
@@ -12,13 +12,36 @@ const Blogs = ({ onShowNews, onCreateBlog }) => {
   const [titleValid, setTitleValid] = useState(true);
   const [contentValid, setContentValid] = useState(true);
 
+  useEffect(() => {
+    if (isEditing && editPost) {
+      setImage(editPost.image);
+      setTitle(editPost.title);
+      setContent(editPost.content);
+      setShowForm(true);
+    } else {
+      setImage(null);
+      setTitle("");
+      setContent("");
+      setShowForm(false);
+    }
+  }, [isEditing, editPost]);
+
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      const maxSize = 1 * 1024 * 1024;
+
+      if (file.size > maxSize) {
+        alert("File is too big! Max size is 1MB");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
@@ -49,7 +72,7 @@ const Blogs = ({ onShowNews, onCreateBlog }) => {
       content,
     };
 
-    onCreateBlog(newBlog);
+    onCreateBlog(newBlog, isEditing);
     setImage(null);
     setTitle("");
     setContent("");
@@ -75,7 +98,7 @@ const Blogs = ({ onShowNews, onCreateBlog }) => {
         )}
         {submited && <p className="submission-message">Post submitted!</p>}
         <div className={`blogs-right-form ${showForm ? "visible" : "hidden"}`}>
-          <h1>New Post</h1>
+          <h1>{isEditing ? "Edit Post" : "New Post"}</h1>
           <form onSubmit={handleSubmit}>
             <div className="img-upload">
               <label htmlFor="file-upload" className="file-upload">
@@ -101,7 +124,7 @@ const Blogs = ({ onShowNews, onCreateBlog }) => {
               onChange={handleContentChange}
             ></textarea>
             <button type="submit" className="submit-btn">
-              Submit Button
+              {isEditing ? "Update Post" : "Submit Post"}
             </button>
           </form>
         </div>
